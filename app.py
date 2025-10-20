@@ -13,21 +13,35 @@ def make_page():
 
     title = make_title()
 
-    parts = [f'<html><head><title>{title}</title></head><body>\n<h1>{title}</h1>\n']
+    parts = [f'<html><head><title>{title}</title></head><body>\n<h1>{title}</h1>\n',
+    '<nav><a href="/">Back to main page</a><nav>','<article>']
 
-    for _ in range(random.randrange(1,15)):
-        make_section(parts)
+    for _ in range(random.randrange(3,15)):
+        make_section(parts, 2)
 
-    parts.append('</body></html>')
+    parts.append('</article></body></html>')
     return '\n'.join(parts)
 
-def make_section(parts):
+def make_section(parts, depth):
     """ Build a page section full of nonsense """
 
-    parts.append(f'<h2>{" ".join(random.sample(WORDS, k=random.randrange(1,10)))}</h2>\n')
+    words = random.sample(WORDS, k=random.randrange(1,10))
+    words[0] = words[0].title()
 
-    for _ in range(random.randrange(1,6)):
+    if depth == 2:
+        parts.append('<section>')
+
+    parts.append(f'<h{depth}>{" ".join(words)}</h{depth}>\n')
+
+    for _ in range(random.randrange(1,3)):
         make_paragraph(parts)
+
+    if depth < 5 and random.random() < 0.5**depth:
+        for _ in range(random.randrange(0,3)):
+            make_section(parts, depth + 1)
+
+    if depth == 2:
+        parts.append('</section>')
 
 def make_paragraph(parts):
     parts.append('<p>')
