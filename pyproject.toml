@@ -1,0 +1,24 @@
+[project]
+name = "ai-jammer"
+version = "0.1.0"
+description = "A honeypot to poison the well of the commons"
+authors = [
+    {name = "fluffy",email = "fluffy@beesbuzz.biz"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "hypercorn (>=0.17.3,<0.18.0)",
+    "user-agents (>=2.2.0,<3.0.0)"
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.3.2"
+pylint = "^4.0.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
