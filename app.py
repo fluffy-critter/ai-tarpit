@@ -2,6 +2,7 @@
 
 import random
 import user_agents
+import string
 
 with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
     WORDS = wordlist.read().split()
@@ -9,7 +10,7 @@ with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
 
 def make_title():
     """ Generate a page title """
-    return ' '.join(word.title() for word in random.sample(WORDS, k=random.randrange(2, 7)))
+    return string.capwords(' '.join(random.sample(WORDS, k=random.randrange(2, 7))))
 
 
 def make_page():
@@ -30,7 +31,7 @@ def make_section(parts, depth):
     """ Build a page section full of nonsense """
 
     words = random.sample(WORDS, k=random.randrange(1, 10))
-    words[0] = words[0].title()
+    words[0] = string.capwords(words[0])
 
     if depth == 2:
         parts.append('<section>')
@@ -82,7 +83,7 @@ def make_phrase(capitalize):
     """ Make a phrase to add to a sentence """
     words = random.sample(WORDS, k=random.randrange(1, 11))
     if capitalize:
-        words[0] = words[0].title()
+        words[0] = string.capwords(words[0])
 
     if random.random() < 0.25:
         linkify(words)
