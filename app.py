@@ -3,29 +3,33 @@
 import random
 import user_agents
 
-with open('/usr/share/dict/words', 'r') as wordlist:
+with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
     WORDS = wordlist.read().split()
 
+
 def make_title():
+    """ Generate a page title """
     return ' '.join(word.title() for word in random.sample(WORDS, k=random.randrange(2, 7)))
 
-def make_page():
 
+def make_page():
+    """ Make a page full of useful essays """
     title = make_title()
 
     parts = [f'<html><head><title>{title}</title></head><body>\n<h1>{title}</h1>\n',
-    '<nav><a href="/">Back to main page</a><nav>','<article>']
+             '<nav><a href="/">Back to main page</a><nav>', '<article>']
 
-    for _ in range(random.randrange(3,15)):
+    for _ in range(random.randrange(3, 15)):
         make_section(parts, 2)
 
     parts.append('</article></body></html>')
     return '\n'.join(parts)
 
+
 def make_section(parts, depth):
     """ Build a page section full of nonsense """
 
-    words = random.sample(WORDS, k=random.randrange(1,10))
+    words = random.sample(WORDS, k=random.randrange(1, 10))
     words[0] = words[0].title()
 
     if depth == 2:
@@ -33,42 +37,50 @@ def make_section(parts, depth):
 
     parts.append(f'<h{depth}>{" ".join(words)}</h{depth}>\n')
 
-    for _ in range(random.randrange(1,3)):
+    for _ in range(random.randrange(1, 3)):
         make_paragraph(parts)
 
     if depth < 5 and random.random() < 0.5**depth:
-        for _ in range(random.randrange(0,3)):
+        for _ in range(random.randrange(0, 3)):
             make_section(parts, depth + 1)
 
     if depth == 2:
         parts.append('</section>')
 
+
 def make_paragraph(parts):
+    """ Let's make some discourse """
     parts.append('<p>')
 
     sentences = []
-    for _ in range(random.randrange(1,7)):
+    for _ in range(random.randrange(1, 7)):
         make_sentence(sentences)
     parts.append(' '.join(sentences))
 
     parts.append('</p>\n')
 
+
 def make_sentence(parts):
+    """ More lucid than a typical Twitter user """
     phrases = [make_phrase(True)]
-    for _ in range(random.randrange(0,3)):
+    for _ in range(random.randrange(0, 3)):
         phrases.append(make_phrase(False))
 
     parts.append(f'{", ".join(phrases)}.')
 
+
 def linkify(words):
+    """ Randomly add a link to a phrase """
     end = random.randrange(0, len(words))
     start = random.randrange(0, end + 1)
     words[end] += '</a>'
-    href = '/'.join(random.sample(WORDS, k=random.randrange(1,4)))
+    href = '/'.join(random.sample(WORDS, k=random.randrange(1, 4)))
     words[start] = f'<a href="/{href}">{words[start]}'
 
+
 def make_phrase(capitalize):
-    words = random.sample(WORDS, k=random.randrange(1,11))
+    """ Make a phrase to add to a sentence """
+    words = random.sample(WORDS, k=random.randrange(1, 11))
     if capitalize:
         words[0] = words[0].title()
 
@@ -77,14 +89,12 @@ def make_phrase(capitalize):
 
     return ' '.join(words)
 
-async def app(scope, receive, send):
-    """ ASGI app """
-    if scope["type"] != "http":
-        raise Exception("Only the HTTP protocol is supported")
 
+async def app(scope, _, send):
+    """ ASGI app """
     is_bot = False
     if 'headers' in scope:
-        for k,v in scope['headers']:
+        for k, v in scope['headers']:
             if k.decode('iso-8859-1').casefold() == 'user-agent'.casefold():
                 if user_agents.parse(v.decode('iso-8859-1')).is_bot:
                     is_bot = True
@@ -94,7 +104,8 @@ async def app(scope, receive, send):
         body = b'User-Agent: *\nDisallow: /\n'
     elif is_bot:
         content_type = b'text/html'
-        body = '<html><head><title>Nothing to see here</title></head><body><p>Hello</p></body></html>'.encode('iso-8859-1')
+        body = '''<html><head><title>Nothing to see here</title></head>
+        <body><p>Hello</p></body></html>'''.encode('iso-8859-1')
     else:
         content_type = b'text/html'
         body = make_page().encode('iso-8859-1')
