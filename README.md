@@ -19,7 +19,12 @@ server {
 }
 ```
 
-and add whatever SSL configuration is appropriate for your setup.
+and add whatever SSL configuration is appropriate for your setup. Then have a hidden link on your website that points to the tarpit, and cackle with glee as AI scrapers and other such nonsense gets mired in the muck.
 
-I am running a public instance at IP address [170.187.142.27](http://170.187.142.27) which you can feel free to map any hostname to it, although for https you'll have to run your own termination to it. The [Cloudflare](https://cloudflare.com/) free plan can automatically enable https termination for this as well.
+Here are some public instances you can use:
 
+* @fluffy-critter - [170.187.142.27](http://170.187.142.27)
+
+    You can theoretically map any hostname to this, but for https to work you'll need to run your own fronting proxy. Cloudflare should Just Work™ with it.
+
+If you also run a public instance, please let me know and I can add it to the list!

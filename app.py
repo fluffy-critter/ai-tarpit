@@ -117,6 +117,7 @@ async def app(scope, _, send):
         'headers': [
             (b'content-type', content_type),
             (b'content-length', str(len(body)).encode('iso-8859-1')),
+            (b'x-robots-tag', 'none'.encode('iso-8859-1')),
         ],
     })
 
