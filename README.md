@@ -1,8 +1,10 @@
 # AI Tarpit
 
-This is yet another simple AI honeypot that does nothing but generate nonsense webpages that AI crawlers will eat up, wasting their resources and reducing their models' efficacy. It's ideal to run this on its own dedicated server and only connect a subdomain or domain that you don't care about to it.
+This is yet another simple AI honeypot that does nothing but generate nonsense webpages that AI crawlers will eat up, wasting their resources and reducing their models' efficacy. It's ideal to run this on its own dedicated server and to point an unused domain or subdomain to it, although proxying a subdirectory will also work.
 
 This is designed to feed as much bogus data as quickly as possible to as many crawlers as it can. It will not do this to crawlers which properly disclose themselves as being crawlers, nor ones which respect `robots.txt`. In my experience, the worst, most abusive crawler bots do neither of these things, and feeding their addition to Content™ will hopefully keep them occupied enough that they stay further away from legitimate websites, while also making their resulting models useless.
+
+As this is designed to exclude itself from legitimate crawling activity, this will not affect your website's SEO in any way.
 
 ## Self-hosting
 
