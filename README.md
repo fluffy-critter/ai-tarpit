@@ -33,7 +33,7 @@ Here are some public instances you can use:
 
 * @fluffy-critter - [170.187.142.27](http://170.187.142.27)
 
-    You can theoretically map any hostname to this, but for https to work you'll need to run your own fronting proxy. Cloudflare should Just Work™ with it.
+    You can theoretically map any hostname to this, but for https to work you'll need to run your own fronting proxy.
 
 If you also run a public instance, please let me know and I can add it to the list!
 
