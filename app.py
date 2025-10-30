@@ -109,7 +109,7 @@ async def app(scope, _, send):
         <body><p>Hello</p></body></html>'''.encode('utf-8')
     else:
         content_type = b'text/html; charset=utf-8'
-        body = make_page().encode('iso-8859-1')
+        body = make_page().encode('utf-8')
 
     await send({
         'type': 'http.response.start',
