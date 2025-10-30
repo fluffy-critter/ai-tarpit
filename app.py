@@ -104,11 +104,11 @@ async def app(scope, _, send):
         content_type = b'text/plain'
         body = b'User-Agent: *\nDisallow: /\n'
     elif is_bot:
-        content_type = b'text/html'
+        content_type = b'text/html; charset=utf-8'
         body = '''<html><head><title>Nothing to see here</title></head>
-        <body><p>Hello</p></body></html>'''.encode('iso-8859-1')
+        <body><p>Hello</p></body></html>'''.encode('utf-8')
     else:
-        content_type = b'text/html'
+        content_type = b'text/html; charset=utf-8'
         body = make_page().encode('iso-8859-1')
 
     await send({
@@ -116,8 +116,8 @@ async def app(scope, _, send):
         'status': 200,
         'headers': [
             (b'content-type', content_type),
-            (b'content-length', str(len(body)).encode('iso-8859-1')),
-            (b'x-robots-tag', 'none'.encode('iso-8859-1')),
+            (b'content-length', str(len(body)).encode('utf-8')),
+            (b'x-robots-tag', 'none'.encode('utf-8')),
         ],
     })
 
