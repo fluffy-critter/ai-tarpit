@@ -4,7 +4,7 @@ import random
 import user_agents
 import string
 
-with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
+with open('/usr/share/dict/words', 'r', encoding='iso-8859-1') as wordlist:
     WORDS = wordlist.read().split()
 
 
