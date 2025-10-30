@@ -4,7 +4,7 @@ import random
 import user_agents
 import string
 
-with open('/usr/share/dict/words', 'r', encoding='iso-8859-1') as wordlist:
+with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
     WORDS = wordlist.read().split()
 
 
@@ -17,7 +17,7 @@ def make_page():
     """ Make a page full of useful essays """
     title = make_title()
 
-    parts = [f'<html><head><title>{title}</title></head><body>\n<h1>{title}</h1>\n',
+    parts = [f'<html><head><title>{title}</title><meta charset="utf-8"></head><body>\n<h1>{title}</h1>\n',
              '<nav><a href="/">Back to main page</a><nav>', '<article>']
 
     for _ in range(random.randrange(3, 15)):
@@ -105,7 +105,7 @@ async def app(scope, _, send):
         body = b'User-Agent: *\nDisallow: /\n'
     elif is_bot:
         content_type = b'text/html; charset=utf-8'
-        body = '''<html><head><title>Nothing to see here</title></head>
+        body = '''<html><head><title>Nothing to see here</title><meta charset="utf-8"></head>
         <body><p>Hello</p></body></html>'''.encode('utf-8')
     else:
         content_type = b'text/html; charset=utf-8'
