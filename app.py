@@ -20,7 +20,7 @@ def make_page():
 
     parts = [f'<html><head><title>{title}</title>'
              f'<meta charset="utf-8"></head><body>\n<h1>{title}</h1>\n',
-             '<nav><a href="/">Back to main page</a><nav>', '<article>']
+             '<nav><a href="/">Back to main page</a></nav>', '<article>']
 
     for _ in range(random.randrange(3, 15)):
         make_section(parts, 2)
