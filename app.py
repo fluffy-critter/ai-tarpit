@@ -97,7 +97,10 @@ async def app(scope, _, send):
     if 'headers' in scope:
         for k, v in scope['headers']:
             if k.decode('iso-8859-1').casefold() == 'user-agent'.casefold():
-                if user_agents.parse(v.decode('iso-8859-1')).is_bot:
+                user_agent = v.decode('iso-8859-1').casefold()
+                if ('+http://' in user_agent or
+                    '+https://' in user_agent or
+                        user_agents.parse(user_agent).is_bot):
                     is_bot = True
 
     if scope['path'] == '/robots.txt':
