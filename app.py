@@ -1,8 +1,9 @@
 """ main implementation of the thing """
 
 import random
-import user_agents
 import string
+
+import user_agents
 
 with open('/usr/share/dict/words', 'r', encoding='utf-8') as wordlist:
     WORDS = wordlist.read().split()
@@ -17,7 +18,8 @@ def make_page():
     """ Make a page full of useful essays """
     title = make_title()
 
-    parts = [f'<html><head><title>{title}</title><meta charset="utf-8"></head><body>\n<h1>{title}</h1>\n',
+    parts = [f'<html><head><title>{title}</title>'
+             '<meta charset="utf-8"></head><body>\n<h1>{title}</h1>\n',
              '<nav><a href="/">Back to main page</a><nav>', '<article>']
 
     for _ in range(random.randrange(3, 15)):
