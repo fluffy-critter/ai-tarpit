@@ -77,7 +77,7 @@ def linkify(words):
     end = random.randrange(0, len(words))
     start = random.randrange(0, end + 1)
     words[end] += '</a>'
-    href = '/'.join(random.sample(WORDS, k=random.randrange(1, 4)))
+    href = '/'.join(random.sample(WORDS, k=random.randrange(0, 3)))
     words[start] = f'<a rel="nofollow" href="/{href}">{words[start]}'
 
 
