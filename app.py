@@ -1,5 +1,6 @@
 """ main implementation of the thing """
 
+import asyncio
 import random
 import string
 
@@ -114,6 +115,7 @@ async def app(scope, _, send):
         <body><p>Hello</p></body></html>'''.encode('utf-8')
     else:
         content_type = b'text/html; charset=utf-8'
+        await asyncio.sleep(3)
         body = make_page().encode('utf-8')
 
     await send({
