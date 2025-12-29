@@ -18,12 +18,15 @@ def make_page():
     """ Make a page full of useful essays """
     title = make_title()
 
-    parts = [f'<html><head><title>{title}</title>'
-             f'<meta charset="utf-8"></head><body>\n<h1>{title}</h1>\n',
-             '<nav><a href="/">Back to main page</a></nav>', '<article>']
+    parts = ['<!DOCTYPE html>\n<html lang="en"><head>',
+             f'<title>{title}</title>'
+             '<meta charset="utf-8"></head><body>',
+             '<nav><a href="/">Back to main page</a></nav>',
+             '<article>',
+             f'<h1>{title}</h1>\n']
 
     for _ in range(random.randrange(3, 15)):
-        make_section(parts, 2)
+        make_section(parts, 1)
 
     parts.append('</article></body></html>')
     return '\n'.join(parts)
