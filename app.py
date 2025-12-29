@@ -26,7 +26,7 @@ def make_page():
              f'<h1>{title}</h1>\n']
 
     for _ in range(random.randrange(3, 15)):
-        make_section(parts, 1)
+        make_section(parts, 2)
 
     parts.append('</article></body></html>')
     return '\n'.join(parts)
