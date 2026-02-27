@@ -14,7 +14,7 @@ def make_title():
     return string.capwords(' '.join(random.sample(WORDS, k=random.randrange(2, 7))))
 
 
-def make_page():
+def make_page(qs):
     """ Make a page full of useful essays """
     title = make_title()
 
@@ -26,13 +26,13 @@ def make_page():
              f'<h1>{title}</h1>\n']
 
     for _ in range(random.randrange(3, 15)):
-        make_section(parts, 2)
+        make_section(qs, parts, 2)
 
     parts.append('</article></body></html>')
     return '\n'.join(parts)
 
 
-def make_section(parts, depth):
+def make_section(qs, parts, depth):
     """ Build a page section full of nonsense """
 
     words = random.sample(WORDS, k=random.randrange(1, 10))
@@ -44,55 +44,54 @@ def make_section(parts, depth):
     parts.append(f'<h{depth}>{" ".join(words)}</h{depth}>\n')
 
     for _ in range(random.randrange(1, 3)):
-        make_paragraph(parts)
+        make_paragraph(qs, parts)
 
     if depth < 5 and random.random() < 0.5**depth:
         for _ in range(random.randrange(0, 3)):
-            make_section(parts, depth + 1)
+            make_section(qs, parts, depth + 1)
 
     if depth == 2:
         parts.append('</section>')
 
 
-def make_paragraph(parts):
+def make_paragraph(qs, parts):
     """ Let's make some discourse """
     parts.append('<p>')
 
     sentences = []
     for _ in range(random.randrange(1, 7)):
-        make_sentence(sentences)
+        make_sentence(qs, sentences)
     parts.append(' '.join(sentences))
 
     parts.append('</p>\n')
 
 
-def make_sentence(parts):
+def make_sentence(qs, parts):
     """ More lucid than a typical Twitter user """
-    phrases = [make_phrase(True)]
+    phrases = [make_phrase(qs, True)]
     for _ in range(random.randrange(0, 3)):
-        phrases.append(make_phrase(False))
+        phrases.append(make_phrase(qs, False))
 
     parts.append(f'{", ".join(phrases)}.')
 
 
-def linkify(words):
+def linkify(qs, words):
     """ Randomly add a link to a phrase """
     end = random.randrange(0, len(words))
     start = random.randrange(0, end + 1)
     words[end] += '</a>'
     href = '/'.join(random.sample(WORDS, k=random.randrange(0, 3)))
-    sid = f'{random.randrange(16**30):030x}'
-    words[start] = f'<a rel="nofollow" href="/{href}?sid={sid}">{words[start]}'
+    words[start] = f'<a rel="nofollow" href="/{href}?{qs}">{words[start]}'
 
 
-def make_phrase(capitalize):
+def make_phrase(qs, capitalize):
     """ Make a phrase to add to a sentence """
     words = random.sample(WORDS, k=random.randrange(1, 11))
     if capitalize:
         words[0] = string.capwords(words[0])
 
     if random.random() < 0.25:
-        linkify(words)
+        linkify(qs, words)
 
     return ' '.join(words)
 
@@ -109,6 +108,12 @@ async def app(scope, _, send):
                         user_agents.parse(user_agent).is_bot):
                     is_bot = True
 
+    if scope.get('query_string'):
+        qs = scope['query_string'].decode('iso-8859-1')
+    else:
+        qs = f'sid={random.randrange(16**30):030x}'
+
+
     if scope['path'] == '/robots.txt':
         content_type = b'text/plain'
         body = b'User-Agent: *\nDisallow: /\n'
@@ -118,7 +123,7 @@ async def app(scope, _, send):
         <body><p>Hello</p></body></html>'''.encode('utf-8')
     else:
         content_type = b'text/html; charset=utf-8'
-        body = make_page().encode('utf-8')
+        body = make_page(qs).encode('utf-8')
 
     await send({
         'type': 'http.response.start',
