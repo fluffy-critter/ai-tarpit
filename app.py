@@ -113,7 +113,6 @@ async def app(scope, _, send):
     else:
         qs = f'sid={random.randrange(16**30):030x}'
 
-
     if scope['path'] == '/robots.txt':
         content_type = b'text/plain'
         body = b'User-Agent: *\nDisallow: /\n'

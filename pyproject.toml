@@ -19,6 +19,7 @@ package-mode = false
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.3.2"
 pylint = "^4.0.2"
+isort = "^8.0.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
