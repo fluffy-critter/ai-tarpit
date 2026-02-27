@@ -81,7 +81,8 @@ def linkify(words):
     start = random.randrange(0, end + 1)
     words[end] += '</a>'
     href = '/'.join(random.sample(WORDS, k=random.randrange(0, 3)))
-    words[start] = f'<a rel="nofollow" href="/{href}">{words[start]}'
+    sid = f'{random.randrange(16**30):030x}'
+    words[start] = f'<a rel="nofollow" href="/{href}?sid={sid}">{words[start]}'
 
 
 def make_phrase(capitalize):
