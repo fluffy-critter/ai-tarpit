@@ -1,0 +1,7 @@
+bind = ["127.0.0.1:8000"]
+workers = 4
+loglevel = "WARNING"
+keep_alive_timeout = 1
+max_requests = 10000
+max_requests_jitter = 1000
+read_timeout = 1

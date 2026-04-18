@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "hypercorn (>=0.17.3,<0.18.0)",
-    "user-agents (>=2.2.0,<3.0.0)"
+    "user-agents (>=2.2.0,<3.0.0)",
 ]
 
 [tool.poetry]

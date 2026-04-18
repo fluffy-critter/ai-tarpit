@@ -1,5 +1,4 @@
 """ main implementation of the thing """
-
 import random
 import string
 
@@ -96,45 +95,58 @@ def make_phrase(qs, capitalize):
     return ' '.join(words)
 
 
-async def app(scope, _, send):
+async def app(scope, receive, send):
     """ ASGI app """
-    is_bot = False
-    if 'headers' in scope:
-        for k, v in scope['headers']:
-            if k.decode('iso-8859-1').casefold() == 'user-agent'.casefold():
-                user_agent = v.decode('iso-8859-1').casefold()
-                if ('+http://' in user_agent or
-                    '+https://' in user_agent or
-                        user_agents.parse(user_agent).is_bot):
-                    is_bot = True
+    if scope['type'] == 'lifespan':
+        while True:
+            message = await receive()
+            if message['type'] == 'lifespan.startup':
+                await send({'type': 'lifespan.startup.complete'})
+            elif message['type'] == 'lifespan.shutdown':
+                await send({'type': 'lifespan.shutdown.complete'})
+                return
 
-    if scope.get('query_string'):
-        qs = scope['query_string'].decode('iso-8859-1')
-    else:
-        qs = f'sid={random.randrange(16**30):030x}'
+    if scope['type'] == 'http':
+        is_bot = False
+        if 'headers' in scope:
+            for k, v in scope['headers']:
+                if k.decode('iso-8859-1').casefold() == 'user-agent'.casefold():
+                    user_agent = v.decode('iso-8859-1').casefold()
+                    if ('+http://' in user_agent or
+                        '+https://' in user_agent or
+                            user_agents.parse(user_agent).is_bot):
+                        is_bot = True
 
-    if scope['path'] == '/robots.txt':
-        content_type = b'text/plain'
-        body = b'User-Agent: *\nDisallow: /\n'
-    elif is_bot:
-        content_type = b'text/html; charset=utf-8'
-        body = '''<html><head><title>Nothing to see here</title><meta charset="utf-8"></head>
-        <body><p>Hello</p></body></html>'''.encode('utf-8')
-    else:
-        content_type = b'text/html; charset=utf-8'
-        body = make_page(qs).encode('utf-8')
+        if scope.get('query_string'):
+            qs = scope['query_string'].decode('iso-8859-1')
+        else:
+            qs = f'sid={random.randrange(16**30):030x}'
 
-    await send({
-        'type': 'http.response.start',
-        'status': 200,
-        'headers': [
-            (b'content-type', content_type),
-            (b'content-length', str(len(body)).encode('utf-8')),
-            (b'x-robots-tag', 'none'.encode('utf-8')),
-        ],
-    })
+        if scope['path'] == '/robots.txt':
+            content_type = b'text/plain'
+            body = b'User-Agent: *\nDisallow: /\n'
+        elif is_bot:
+            content_type = b'text/html; charset=utf-8'
+            body = '''<html><head><title>Nothing to see here</title><meta charset="utf-8"></head>
+            <body><p>Hello</p></body></html>'''.encode('utf-8')
+        else:
+            content_type = b'text/html; charset=utf-8'
+            body = make_page(qs).encode('utf-8')
 
-    await send({
-        'type': 'http.response.body',
-        'body': body,
-    })
+        await send({
+            'type': 'http.response.start',
+            'status': 200,
+            'headers': [
+                (b'content-type', content_type),
+                (b'content-length', str(len(body)).encode('utf-8')),
+                (b'x-robots-tag', 'none'.encode('utf-8')),
+            ],
+        })
+
+        await send({
+            'type': 'http.response.body',
+            'body': body,
+        })
+        return
+
+    raise RuntimeError(f"unknown scope {scope['type']}")

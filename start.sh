@@ -1,4 +1,4 @@
 #!/bin/sh
 
 poetry install
-poetry run hypercorn app:app "$@"
+poetry run hypercorn --config config.toml app:app "$@"
